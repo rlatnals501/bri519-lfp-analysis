@@ -83,5 +83,9 @@ reproducibility and cross-platform compatibility.
 ## Notes
 
 This project follows proper version control practices and modular refactoring.
+Inline code comments and docstrings are provided throughout the source code to explain
+the purpose, input/output structure, and key logic of core functions, including
+outlier rejection, filtering, and time- and frequency-domain analyses.
+
 Conceptual guidance and structural suggestions were informed using AI tools,
 while all code implementation and analysis decisions were independently performed.
