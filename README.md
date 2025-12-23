@@ -18,6 +18,15 @@ The analysis pipeline consists of the following steps:
 
 ---
 
+## Getting Started
+First, clone the repository and move into the project directory:
+```bash
+git clone https://github.com/kimsumin/BRI519-LFP-ANALYSIS.git
+cd BRI519-LFP-ANALYSIS
+```
+
+---
+
 ## Project Structure
 
 - `src/lfp/` — Core analysis modules
@@ -40,7 +49,6 @@ pip install -r requirements.txt
 
 ---
 
-
 ## Data
 
 Place the dataset file in the following location:
@@ -54,7 +62,6 @@ The dataset is not included in this repository and must be obtained separately.
 ## Usage
 
 All scripts should be executed from the project root directory.
-
 Because the source code is located under the src/ directory, please use the following
 command format:
 ```bash
@@ -125,3 +132,53 @@ are correctly saved in appropriate formats, including per-session NumPy files
 (`.npz`), session-level visualization figures (`.png`), and a MATLAB-compatible
 summary file (`.mat`). All scripts were executed successfully without errors,
 confirming that the refactored pipeline functions as intended.
+
+---
+
+## Docker Setup & Usage
+
+This project is fully containerized using Docker to ensure reproducible execution of the LFP analysis pipeline.
+
+1. Build the Docker Image
+
+Clone the repository and build the Docker image locally:
+```bash
+git clone https://github.com/rlatnals501/bri519-lfp-analysis.git
+cd BRI519-LFP-ANALYSIS
+
+docker build -t bri519-lfp:latest .
+```
+`bri519-lfp` is the local image name.
+You may change it if needed.
+
+2. Run the Docker Container
+
+Run the full analysis pipeline (equivalent to `run_all.py`) using Docker:
+```bash
+docker run --rm -v "$PWD/data:/app/data" -v "$PWD/results:/app/results" bri519-lfp:latest
+```
+Explanation
+- `--rm` : Automatically remove the container after execution
+- `-v "$PWD/data:/app/data"` : Mount input data directory
+- `-v "$PWD/results:/app/results"` : Mount output results directory
+- All analysis results (`.png`, `.npz`, `.mat`) will be saved to `results/`
+
+3. Docker Hub Image
+The pre-built Docker image is available on Docker Hub:
+```bash
+https://hub.docker.com/r/rlatnals501/bri519-lfp
+```
+You can pull and run the image directly without building it locally:
+```bash
+docker pull rlatnals501/bri519-lfp:final
+
+docker run --rm -v "$PWD/data:/app/data" -v "$PWD/results:/app/results" rlatnals501/bri519-lfp:final
+```
+
+4. Reproducibility Note
+The Docker container includes all required Python dependencies.
+Running the container produces identical outputs to local execution.
+The analysis entry point is configured via the Docker CMD to execute:
+```bash
+PYTHONPATH=src python -m lfp.scripts.run_all --mat data/mouseLFP.mat --outdir results
+```
