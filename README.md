@@ -83,6 +83,10 @@ reproducibility and cross-platform compatibility.
 ## Notes
 
 This project follows proper version control practices and modular refactoring.
+The original exploratory analysis was conducted in a Jupyter notebook, and the
+finalized analysis pipeline was refactored into modular Python scripts to improve
+reusability, readability, and maintainability.
+
 Inline code comments and docstrings are provided throughout the source code to explain
 the purpose, input/output structure, and key logic of core functions, including
 outlier rejection, filtering, and time- and frequency-domain analyses.
