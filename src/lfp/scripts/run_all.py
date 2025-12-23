@@ -77,6 +77,29 @@ def main():
         fig.savefig(os.path.join(args.outdir, f"session{s+1}_method1.png"), dpi=200)
         plt.close(fig)
 
+        # -----------------------------
+        # Plot per-session Method 2 (spectrogram)
+        # -----------------------------
+        fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+        for ax, mean_sig, label in zip(
+            axes,
+            [res["mean_low"], res["mean_high"]],
+            ["Low tone", "High tone"],
+        ):
+            f, t, Sxx = compute_spectrogram(mean_sig, cfg.fs, window, noverlap)
+            m = f <= cfg.max_freq_hz
+
+            im = ax.pcolormesh(t, f[m], Sxx[m, :], shading="auto")
+            ax.set_title(f"Session {s+1} {label} Spectrogram")
+            ax.set_xlabel("Time (s)")
+            ax.set_ylabel("Frequency (Hz)")
+            fig.colorbar(im, ax=ax)
+
+        fig.tight_layout()
+        fig.savefig(os.path.join(args.outdir, f"session{s+1}_method2.png"), dpi=200)
+        plt.close(fig)
+
     # -----------------------------
     # Save combined summary (.mat)
     # -----------------------------
