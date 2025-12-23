@@ -43,8 +43,8 @@ Create and activate a virtual environment, then install dependencies:
 python -m venv .venv
 source .venv/bin/activate    # macOS/Linux
 # .venv\Scripts\activate     # Windows
-
-pip install -r requirements.txt
+python -m pip install -U pip
+python -m pip install -r requirements.txt
 ```
 
 ---
