@@ -87,5 +87,6 @@ Inline code comments and docstrings are provided throughout the source code to e
 the purpose, input/output structure, and key logic of core functions, including
 outlier rejection, filtering, and time- and frequency-domain analyses.
 
-Conceptual guidance and structural suggestions were informed using AI tools,
-while all code implementation and analysis decisions were independently performed.
+AI tools (ChatGPT) were used to assist with high-level method brainstorming.
+All coding, analysis, and decision-making processes were conducted independently
+by the author.
