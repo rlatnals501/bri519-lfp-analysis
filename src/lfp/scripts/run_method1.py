@@ -83,37 +83,31 @@ def main():
         # -----------------------------
         # 7. Plot (match midterm style)
         # -----------------------------
-        fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+        fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-        t_ms = np.arange(mean_low.size) / cfg.fs * 1000
-
-        axes[0, 0].plot(t_ms, mean_low, color="k")
-        axes[0, 0].set_title(f"Session {s+1} Low Tone - Mean LFP")
-        axes[0, 0].set_xlabel("Time (ms)")
-        axes[0, 0].set_ylabel("Amplitude")
-
-        axes[0, 1].plot(t_ms, mean_high, color="k")
-        axes[0, 1].set_title(f"Session {s+1} High Tone - Mean LFP")
-        axes[0, 1].set_xlabel("Time (ms)")
-
-        m = f_low <= cfg.max_freq_hz
-        axes[1, 0].plot(f_low[m], pxx_low[m])
-        axes[1, 0].set_title("Low Tone PSD")
-        axes[1, 0].set_xlabel("Frequency (Hz)")
-        axes[1, 0].set_ylabel("Power")
-
-        m = f_high <= cfg.max_freq_hz
-        axes[1, 1].plot(f_high[m], pxx_high[m])
-        axes[1, 1].set_title("High Tone PSD")
-        axes[1, 1].set_xlabel("Frequency (Hz)")
-
-        fig.tight_layout()
-        fig.savefig(
-            os.path.join(args.outdir, f"session{s+1}_method1.png"),
-            dpi=200
+        plot_mean_lfp_overlay(
+            axes[0],
+            res["mean_low"],
+            res["mean_high"],
+            cfg.fs,
+            title=f"Session {s+1} - Mean LFP (Time domain)",
+            stim_on_ms=100,
+            stim_off_ms=150,
         )
-        plt.close(fig)
 
+        plot_psd_overlay(
+            axes[1],
+            res["psd"]["f_low"],  res["psd"]["pxx_low"],
+            res["psd"]["f_high"], res["psd"]["pxx_high"],
+            title=f"Session {s+1} - Post-stimulus PSD (Frequency domain)",
+            max_freq_hz=cfg.max_freq_hz,
+            logy=True,
+        )
+
+        fig.suptitle(f"Session {s+1} - Method 1 (Mean LFP & PSD)")
+        fig.tight_layout()
+        fig.savefig(os.path.join(args.outdir, f"session{s+1}_method1.png"), dpi=200)
+        plt.close(fig)
 
 if __name__ == "__main__":
     main()

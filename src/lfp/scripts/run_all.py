@@ -7,7 +7,7 @@ from scipy.signal.windows import hann
 from lfp.config import LFPConfig
 from lfp.io import load_mouse_lfp_mat
 from lfp.pipeline import LFPPipeline
-from lfp.plots import plot_mean_lfp, plot_psd
+from lfp.plots import plot_mean_lfp_overlay, plot_psd_overlay
 from lfp.tf import compute_spectrogram
 from lfp.save import save_npz, save_mat, ensure_dir
 
@@ -51,58 +51,30 @@ def main():
         # -----------------------------
         # Plot per-session Method 1 (mean LFP + PSD)
         # -----------------------------
-        fig, axes = plt.subplots(2, 2, figsize=(12, 8))
-        plot_mean_lfp(
-            axes[0, 0],
+        fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+        
+        plot_mean_lfp_overlay(
+            axes[0],
             res["mean_low"],
-            cfg.fs,
-            f"Session {s+1} Low tone - Mean LFP",
-        )
-        plot_mean_lfp(
-            axes[0, 1],
             res["mean_high"],
             cfg.fs,
-            f"Session {s+1} High tone - Mean LFP",
+            title=f"Mean LFP (Time domain)",
+            stim_on_ms=100,
+            stim_off_ms=150,
         )
-        plot_psd(
-            axes[1, 0],
-            res["psd"]["f_low"],
-            res["psd"]["pxx_low"],
-            f"Session {s+1} Low tone - PSD",
-            cfg.max_freq_hz,
+
+        plot_psd_overlay(
+            axes[1],
+            res["psd"]["f_low"],  res["psd"]["pxx_low"],
+            res["psd"]["f_high"], res["psd"]["pxx_high"],
+            title=f"Post-stimulus PSD (Frequency domain)",
+            max_freq_hz=cfg.max_freq_hz,
+            logy=True,
         )
-        plot_psd(
-            axes[1, 1],
-            res["psd"]["f_high"],
-            res["psd"]["pxx_high"],
-            f"Session {s+1} High tone - PSD",
-            cfg.max_freq_hz,
-        )
+
+        fig.suptitle(f"Session {s+1} - Method 1 (Mean LFP & PSD)")
         fig.tight_layout()
         fig.savefig(os.path.join(args.outdir, f"session{s+1}_method1.png"), dpi=200)
-        plt.close(fig)
-
-        # -----------------------------
-        # Plot per-session Method 2 (spectrogram)
-        # -----------------------------
-        fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-
-        for ax, mean_sig, label in zip(
-            axes,
-            [res["mean_low"], res["mean_high"]],
-            ["Low tone", "High tone"],
-        ):
-            f, t, Sxx = compute_spectrogram(mean_sig, cfg.fs, window, noverlap)
-            m = f <= cfg.max_freq_hz
-
-            im = ax.pcolormesh(t, f[m], Sxx[m, :], shading="auto")
-            ax.set_title(f"Session {s+1} {label} Spectrogram")
-            ax.set_xlabel("Time (s)")
-            ax.set_ylabel("Frequency (Hz)")
-            fig.colorbar(im, ax=ax)
-
-        fig.tight_layout()
-        fig.savefig(os.path.join(args.outdir, f"session{s+1}_method2.png"), dpi=200)
         plt.close(fig)
 
     # -----------------------------
