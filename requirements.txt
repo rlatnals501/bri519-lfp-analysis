@@ -1,3 +1,16 @@
-numpy
-scipy
-matplotlib
+# Core numerical computing
+numpy>=1.21
+scipy>=1.7
+
+# Visualization
+matplotlib>=3.5
+
+# MATLAB file I/O
+h5py>=3.7
+
+# Command-line interface support
+argparse
+
+# Optional but recommended (stability & compatibility)
+setuptools
+wheel
