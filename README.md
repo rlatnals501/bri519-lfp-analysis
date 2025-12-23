@@ -21,7 +21,7 @@ The analysis pipeline consists of the following steps:
 ## Getting Started
 First, clone the repository and move into the project directory:
 ```bash
-git clone https://github.com/kimsumin/BRI519-LFP-ANALYSIS.git
+git clone https://github.com/rlatnals501/BRI519-LFP-ANALYSIS.git
 cd BRI519-LFP-ANALYSIS
 ```
 
