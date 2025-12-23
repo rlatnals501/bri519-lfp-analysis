@@ -1,4 +1,3 @@
-```markdown
 # BRI519 Mouse LFP Analysis
 
 This project refactors a midterm assignment into a modular and reproducible Python project.
@@ -10,7 +9,6 @@ low- and high-frequency auditory tone stimuli across four experimental sessions.
 ## Project Overview
 
 The analysis pipeline consists of the following steps:
-
 1. Load raw LFP data from `mouseLFP.mat`
 2. Perform baseline-based outlier trial rejection (0–100 ms pre-stimulus)
 3. Apply a 10th-order Butterworth low-pass filter (cutoff frequency: 1000 Hz)
@@ -32,7 +30,6 @@ The analysis pipeline consists of the following steps:
 ## Installation
 
 Create and activate a virtual environment, then install dependencies:
-
 ```bash
 python -m venv .venv
 source .venv/bin/activate    # macOS/Linux
@@ -73,27 +70,12 @@ PYTHONPATH=src python -m lfp.scripts.run_method2 --mat data/mouseLFP.mat --outdi
 ## Output
 
 All analysis outputs are saved under the `results/` directory, including:
-
-- Raw LFP data
-- Low-pass filtered LFP data
-- Baseline-based outlier trial masks
-- Mean LFP waveforms
-- Power spectral density (PSD) results
-- Time–frequency spectrograms
-
+- Per-session numerical results (`session*_results.npz`)
+- Mean LFP and PSD figures (`session*_method1.png`)
+- Time–frequency spectrograms (`session*_method2.png`)
+- MATLAB-compatible summary file (`lfp_analysis_results.mat`)
 Outputs are stored in both NumPy (`.npz`) and MATLAB-compatible (`.mat`) formats to ensure
 reproducibility and cross-platform compatibility.
-
----
-
-### Running the Code
-
-All scripts should be executed from the project root directory.
-
-Because the source code is located under the `src/` directory, please use the
-following command format:
-
-PYTHONPATH=src python -m lfp.scripts.run_all --mat data/mouseLFP.mat --outdir results
 
 ---
 
