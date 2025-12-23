@@ -22,10 +22,10 @@ The analysis pipeline consists of the following steps:
 
 ## Project Structure
 
-src/lfp/ Core analysis modules
-src/lfp/scripts/ Executable scripts
-data/ Input data (mouseLFP.mat)
-results/ Saved outputs and figures
+- `src/lfp/` — Core analysis modules
+- `src/lfp/scripts/` — Executable scripts
+- `data/` — Input data (`mouseLFP.mat`)
+- `results/` — Saved outputs and figures
 
 ---
 
@@ -33,35 +33,41 @@ results/ Saved outputs and figures
 
 Create and activate a virtual environment, then install dependencies:
 
+```bash
 python -m venv .venv
-source .venv/bin/activate # macOS/Linux
+source .venv/bin/activate    # macOS/Linux
+# .venv\Scripts\activate     # Windows
 
-.venv\Scripts\activate # Windows
 pip install -r requirements.txt
+```
 
 ---
+
 
 ## Data
 
 Place the dataset file in the following location:
-
+```bash
 data/mouseLFP.mat
-
+```
 The dataset is not included in this repository and must be obtained separately.
 
 ---
 
 ## Usage
 
-Run the full analysis pipeline:
+All scripts should be executed from the project root directory.
 
-python -m lfp.scripts.run_all --mat data/mouseLFP.mat --outdir results
-
+Because the source code is located under the src/ directory, please use the following
+command format:
+```bash
+PYTHONPATH=src python -m lfp.scripts.run_all --mat data/mouseLFP.mat --outdir results
+```
 Run individual analysis methods:
-
-python -m lfp.scripts.run_method1 --mat data/mouseLFP.mat --outdir results
-python -m lfp.scripts.run_method2 --mat data/mouseLFP.mat --outdir results
-
+```bash
+PYTHONPATH=src python -m lfp.scripts.run_method1 --mat data/mouseLFP.mat --outdir results
+PYTHONPATH=src python -m lfp.scripts.run_method2 --mat data/mouseLFP.mat --outdir results
+```
 ---
 
 ## Output
@@ -80,6 +86,17 @@ reproducibility and cross-platform compatibility.
 
 ---
 
+### Running the Code
+
+All scripts should be executed from the project root directory.
+
+Because the source code is located under the `src/` directory, please use the
+following command format:
+
+PYTHONPATH=src python -m lfp.scripts.run_all --mat data/mouseLFP.mat --outdir results
+
+---
+
 ## Notes
 
 This project follows proper version control practices and modular refactoring.
@@ -94,3 +111,35 @@ outlier rejection, filtering, and time- and frequency-domain analyses.
 AI tools (ChatGPT) were used to assist with high-level method brainstorming.
 All coding, analysis, and decision-making processes were conducted independently
 by the author.
+
+---
+
+## Fixes, Debugging, and Validation
+
+Several issues identified during the refactoring and modularization process
+were systematically resolved to ensure correct and stable execution of the
+analysis pipeline.
+
+First, mismatches between function definitions and function calls were fixed.
+In particular, the spectrogram computation initially included an unnecessary
+argument that was not consistently passed across modules, resulting in runtime
+errors. The function interface was simplified to rely on SciPy’s native frequency
+handling, resolving the issue and improving code clarity.
+
+Second, module import errors were addressed by restructuring the project into a
+proper Python package and enforcing a consistent execution pattern
+(`PYTHONPATH=src python -m lfp.scripts.<script_name>`). This ensured that all
+modules were discoverable and executable from the command line.
+
+Third, the execution logic was reorganized into multiple entry scripts to improve
+clarity and usability. Separate scripts were implemented for running individual
+analysis methods (`run_method1.py` and `run_method2.py`), while a unified script
+(`run_all.py`) was designed to execute the complete analysis pipeline in a single
+command. This structure allows both modular testing of each method and end-to-end
+execution of the full workflow.
+
+Finally, the data storage mechanism was validated by confirming that all outputs
+are correctly saved in appropriate formats, including per-session NumPy files
+(`.npz`), session-level visualization figures (`.png`), and a MATLAB-compatible
+summary file (`.mat`). All scripts were executed successfully without errors,
+confirming that the refactored pipeline functions as intended.
